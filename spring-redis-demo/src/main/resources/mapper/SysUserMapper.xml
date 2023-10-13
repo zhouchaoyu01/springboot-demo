@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.coding.redis.mapper.SysUserMapper">
+
+    <select id="findAllUsers" resultType="com.coding.redis.entity.SysUser">
+        select user_id, user_name, password
+        from sys_user
+    </select>
+    <select id="getUserById" resultType="com.coding.redis.entity.SysUser">
+        select user_id, user_name, password
+        from sys_user
+        where user_id = #{userId}
+    </select>
+</mapper>
