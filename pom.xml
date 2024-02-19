@@ -14,6 +14,7 @@
         <module>spring-redis-demo</module>
         <module>spring-mybatis-demo</module>
         <module>spring-cache-demo</module>
+        <module>spring-tess4j-ocr</module>
     </modules>
 
     <!--版本号管理-->

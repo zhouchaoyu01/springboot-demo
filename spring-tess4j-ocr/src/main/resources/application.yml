@@ -1,0 +1,6 @@
+server:
+  port: 8888
+
+# 训练数据文件夹的路径
+tess4j:
+  datapath: D://Project//spring-framework-demos//spring-tess4j-ocr//src//main//resources//tessdata
