@@ -15,6 +15,7 @@
         <module>spring-mybatis-demo</module>
         <module>spring-cache-demo</module>
         <module>spring-tess4j-ocr</module>
+        <module>batchExcelData-import-export</module>
     </modules>
 
     <!--版本号管理-->
