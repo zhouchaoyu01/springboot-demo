@@ -1,5 +1,6 @@
 package com.coding.entity;
 
+import com.alibaba.excel.annotation.ExcelIgnore;
 import com.alibaba.excel.annotation.ExcelProperty;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.util.Objects;
  */
 @Data
 public class StudentInfo implements Serializable {
+    @ExcelIgnore
     @Serial
     private static final long serialVersionUID = 1L;
     /**

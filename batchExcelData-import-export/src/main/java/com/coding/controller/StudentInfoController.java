@@ -8,6 +8,7 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.fastjson2.JSONObject;
 
 import com.coding.entity.StudentInfo;
+import com.coding.entity.listener.EasyExceGeneralDatalListener;
 import com.coding.example.Record;
 import com.coding.service.StudentInfoService;
 
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -50,18 +52,46 @@ public class StudentInfoController {
 
     }
 
-    @GetMapping("/import")
-    public String importExcel(@RequestParam MultipartFile file) {
+    /**
+     * the request was rejected because its size (45665808) exceeds the configured maximum (10485760)
+     * <p>
+     * spring.servlet.multipart.max-file-size=50MB
+     * spring.servlet.multipart.max-request-size=50MB
+     *
+     *
+     *    ΔJDBC连接MySQL时，如果要使用批处理功能，需要在url 中加入参数?rewriteBatchedStatements=true
+     * 1 没加 ------总耗时:159188ms------
+     * 2 加了 43533ms
+     *
+     *  3.65倍
+     *
+     * @param file
+     * @return
+     */
+    @PostMapping("/import")
+    public String importExcel(@RequestParam("file") MultipartFile file) {
+        //记录开始读取Excel时间,也是导入程序开始时间
+        long startReadTime = System.currentTimeMillis();
+        System.out.println("------开始读取Excel的Sheet时间(包括导入数据过程):" + startReadTime + "ms------");
+        //读取所有Sheet的数据.每次读完一个Sheet就会调用这个方法
+        try {
+            EasyExcel.read(file.getInputStream(), StudentInfo.class, new EasyExceGeneralDatalListener(service)).doReadAll();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        long endReadTime = System.currentTimeMillis();
+        System.out.println("------结束读取Excel的Sheet时间(包括导入数据过程):" + endReadTime + "ms------");
 
-
+        System.out.println("------总耗时:" + (endReadTime-startReadTime) + "ms------");
         return "success";
     }
 
 
     /**
      * 写100w数据到excel中   导出所用时间:41秒
-     *
+     * <p>
      * 写10个sheet 每个10w 每次写2w
+     *
      * @param response
      * @return
      */
@@ -74,7 +104,7 @@ public class StudentInfoController {
                 System.out.println("导出开始时间:" + startTime);
 
                 outputStream = response.getOutputStream();
-                String fileName = new String(("excel100w.xlsx").getBytes(), "UTF-8") ;
+                String fileName = new String(("excel100w.xlsx").getBytes(), "UTF-8");
                 // 创建ExcelWriter
 //                ExcelWriter excelWriter = EasyExcel.write(fileName, StudentInfo.class).build();//本地文件
                 ExcelWriter excelWriter = EasyExcel.write(outputStream, StudentInfo.class).build();//浏览器
@@ -114,13 +144,13 @@ public class StudentInfoController {
 
                     }
                     long s2 = System.currentTimeMillis();
-                    log.info("sheet:{} end {} ms", sheetIndex + 1, s2-s1);
+                    log.info("sheet:{} end {} ms", sheetIndex + 1, s2 - s1);
                 }
 
                 // 下载EXCEL
                 response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
                 response.setCharacterEncoding("utf-8");
-                response.setHeader("Content-Disposition", "attachment;filename=" + fileName );
+                response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
                 excelWriter.finish();
                 outputStream.flush();
                 //导出时间结束
