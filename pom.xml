@@ -16,6 +16,7 @@
         <module>spring-cache-demo</module>
         <module>spring-tess4j-ocr</module>
         <module>batchExcelData-import-export</module>
+        <module>mdc-thread-log-trace</module>
     </modules>
 
     <!--版本号管理-->
