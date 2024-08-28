@@ -1,6 +1,9 @@
 package com.cz.util;
 
 
+import com.alibaba.fastjson.JSONObject;
+import io.micrometer.common.util.StringUtils;
+
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Signature;
@@ -8,10 +11,28 @@ import java.security.KeyFactory;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
+import java.util.Arrays;
 import java.util.Base64;
 
 public class RSAUtil {
+    /**
+     * 按规则拼接字符串
+     */
+    public static String jsonMapToStr(JSONObject jsonObject) {
+        String[] keys = jsonObject.keySet().toArray(new String[0]);
+        Arrays.sort(keys);
+        StringBuilder raw = new StringBuilder();
+        for (String key : keys) {
+            if (!StringUtils.isBlank(jsonObject.getString(key))) {
+                raw.append(key).append("=").append(jsonObject.getString(key)).append("&");
+            }
+        }
 
+        if (raw.length() > 0) {
+            raw.deleteCharAt(raw.length() - 1);
+        }
+        return raw.toString();
+    }
     // 用公钥加密
     public static String encrypt(String data, String publicKeyStr) throws Exception {
         byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyStr);

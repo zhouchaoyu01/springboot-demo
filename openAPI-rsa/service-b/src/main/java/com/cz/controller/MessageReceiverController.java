@@ -5,6 +5,8 @@ package com.cz.controller;
  * @author: zhouchaoyu
  * @Date: 2024-08-22
  */
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.cz.util.RSAUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,5 +39,23 @@ public class MessageReceiverController {
         // 解密消息
         String decryptedMessage = RSAUtil.decrypt(encryptedMessage, PRIVATE_KEY_OF_B);
         return "Decrypted Message: " + decryptedMessage;
+    }
+
+
+    @PostMapping("/data")
+    public TxResponse data(@RequestBody String msg) throws Exception {
+
+        System.out.println(msg);
+        JSONObject map = JSON.parseObject(msg);
+        String sign = (String) map.remove("sign");
+        String signType = (String) map.remove("signType");
+        String respStr = RSAUtil.jsonMapToStr(map);
+        if (!RSAUtil.verify(respStr, sign, PUBLIC_KEY_OF_A)) {
+            throw new Exception("响应报文验签失败");
+        }
+        TxResponse txResponse = JSON.parseObject(msg, TxResponse.class);
+        // 解密消息
+//        String decryptedMessage = RSAUtil.decrypt(encryptedMessage, PRIVATE_KEY_OF_B);
+        return txResponse ;
     }
 }
