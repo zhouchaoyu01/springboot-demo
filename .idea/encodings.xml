@@ -3,6 +3,8 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/batchExcelData-import-export/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/batchExcelData-import-export/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-switch/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data-switch/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mdc-thread-log-trace/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/mdc-thread-log-trace/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/openAPI-rsa/service-a/src/main/java" charset="UTF-8" />

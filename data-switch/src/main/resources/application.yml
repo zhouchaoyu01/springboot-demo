@@ -1,0 +1,13 @@
+spring:
+  profiles:
+    active: dev
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.dataSwitch.**.bean
+
+server:
+  servlet:
+    context-path: /producer
+  port: 8091

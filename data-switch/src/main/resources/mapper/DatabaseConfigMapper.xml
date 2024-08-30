@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dataSwitch.base.dao.DatabaseConfigMapper">
+
+    <resultMap type="DatabaseConfig" id="DatabaseConfigResult">
+        <result property="dsId"    column="ds_id"    />
+        <result property="dsName"    column="ds_name"    />
+        <result property="dsFlag"    column="ds_flag"    />
+        <result property="dbDriver"    column="db_driver"    />
+        <result property="dbName"    column="db_name"    />
+        <result property="userName"    column="user_name"    />
+        <result property="password"    column="password"    />
+        <result property="dbHost"    column="db_host"    />
+        <result property="dbPort"    column="db_port"    />
+        <result property="dbSchema"    column="db_schema"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="minSize"    column="min_size"    />
+        <result property="maxSize"    column="max_size"    />
+    </resultMap>
+
+    <sql id="selectDatabaseConfigVo">
+        select ds_id, ds_name, ds_flag, db_driver, db_name, user_name, password, db_host, db_port, db_schema, status, create_time, update_time, min_size, max_size from database_config
+    </sql>
+
+    <select id="selectDatabaseConfigList" parameterType="DatabaseConfig" resultMap="DatabaseConfigResult">
+        <include refid="selectDatabaseConfigVo"/>
+        <where>
+            <if test="dsName != null  and dsName != ''"> and ds_name like concat('%', #{dsName}, '%')</if>
+            <if test="dsFlag != null  and dsFlag != ''"> and ds_flag = #{dsFlag}</if>
+            <if test="dbDriver != null  and dbDriver != ''"> and db_driver = #{dbDriver}</if>
+            <if test="dbName != null  and dbName != ''"> and db_name like concat('%', #{dbName}, '%')</if>
+            <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
+            <if test="password != null  and password != ''"> and password = #{password}</if>
+            <if test="dbHost != null  and dbHost != ''"> and db_host = #{dbHost}</if>
+            <if test="dbPort != null "> and db_port = #{dbPort}</if>
+            <if test="dbSchema != null  and dbSchema != ''"> and db_schema = #{dbSchema}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="minSize != null "> and min_size = #{minSize}</if>
+            <if test="maxSize != null "> and max_size = #{maxSize}</if>
+        </where>
+    </select>
+
+    <select id="selectDatabaseConfigByDsId" parameterType="Long" resultMap="DatabaseConfigResult">
+        <include refid="selectDatabaseConfigVo"/>
+        where ds_id = #{dsId}
+    </select>
+
+    <insert id="insertDatabaseConfig" parameterType="DatabaseConfig" useGeneratedKeys="true" keyProperty="dsId">
+        insert into database_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dsName != null and dsName != ''">ds_name,</if>
+            <if test="dsFlag != null">ds_flag,</if>
+            <if test="dbDriver != null">db_driver,</if>
+            <if test="dbName != null">db_name,</if>
+            <if test="userName != null">user_name,</if>
+            <if test="password != null">password,</if>
+            <if test="dbHost != null">db_host,</if>
+            <if test="dbPort != null">db_port,</if>
+            <if test="dbSchema != null">db_schema,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="minSize != null">min_size,</if>
+            <if test="maxSize != null">max_size,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dsName != null and dsName != ''">#{dsName},</if>
+            <if test="dsFlag != null">#{dsFlag},</if>
+            <if test="dbDriver != null">#{dbDriver},</if>
+            <if test="dbName != null">#{dbName},</if>
+            <if test="userName != null">#{userName},</if>
+            <if test="password != null">#{password},</if>
+            <if test="dbHost != null">#{dbHost},</if>
+            <if test="dbPort != null">#{dbPort},</if>
+            <if test="dbSchema != null">#{dbSchema},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="minSize != null">#{minSize},</if>
+            <if test="maxSize != null">#{maxSize},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDatabaseConfig" parameterType="DatabaseConfig">
+        update database_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dsName != null and dsName != ''">ds_name = #{dsName},</if>
+            <if test="dsFlag != null">ds_flag = #{dsFlag},</if>
+            <if test="dbDriver != null">db_driver = #{dbDriver},</if>
+            <if test="dbName != null">db_name = #{dbName},</if>
+            <if test="userName != null">user_name = #{userName},</if>
+            <if test="password != null">password = #{password},</if>
+            <if test="dbHost != null">db_host = #{dbHost},</if>
+            <if test="dbPort != null">db_port = #{dbPort},</if>
+            <if test="dbSchema != null">db_schema = #{dbSchema},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="minSize != null">min_size = #{minSize},</if>
+            <if test="maxSize != null">max_size = #{maxSize},</if>
+        </trim>
+        where ds_id = #{dsId}
+    </update>
+
+    <delete id="deleteDatabaseConfigByDsId" parameterType="Long">
+        delete from database_config where ds_id = #{dsId}
+    </delete>
+
+    <delete id="deleteDatabaseConfigByDsIds" parameterType="String">
+        delete from database_config where ds_id in
+        <foreach item="dsId" collection="array" open="(" separator="," close=")">
+            #{dsId}
+        </foreach>
+    </delete>
+</mapper>

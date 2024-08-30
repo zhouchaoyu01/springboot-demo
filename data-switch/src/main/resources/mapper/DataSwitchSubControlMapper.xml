@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dataSwitch.base.dao.DataSwitchSubControlMapper">
+    
+    <resultMap type="com.dataSwitch.base.bean.DataSwitchSubControl" id="DataSwitchSubControlResult">
+        <result property="rowId"    column="row_id"    />
+        <result property="mainId"    column="main_id"    />
+        <result property="dsId"    column="ds_id"    />
+        <result property="srcTbName"    column="src_tb_name"    />
+        <result property="distTbName"    column="dist_tb_name"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="queryColumn"    column="query_column"    />
+        <result property="rowColumn"    column="row_column"    />
+        <result property="status"    column="status"    />
+        <result property="priorityLevel"    column="priority_level"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectDataSwitchSubControlVo">
+        select row_id, main_id, ds_id, src_tb_name, dist_tb_name, start_time, query_column, row_column,status, priority_level, create_time, update_time from data_switch_sub_control
+    </sql>
+
+    <select id="selectDataSwitchSubControlList" parameterType="DataSwitchSubControl" resultMap="DataSwitchSubControlResult">
+        <include refid="selectDataSwitchSubControlVo"/>
+        <where>  
+            <if test="mainId != null "> and main_id = #{mainId}</if>
+            <if test="dsId != null "> and ds_id = #{dsId}</if>
+            <if test="srcTbName != null  and srcTbName != ''"> and src_tb_name like concat('%', #{srcTbName}, '%')</if>
+            <if test="distTbName != null  and distTbName != ''"> and dist_tb_name like concat('%', #{distTbName}, '%')</if>
+            <if test="startTime != null  and startTime != ''"> and start_time = #{startTime}</if>
+            <if test="queryColumn != null  and queryColumn != ''"> and query_column = #{queryColumn}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="priorityLevel != null  and priorityLevel != ''"> and priority_level = #{priorityLevel}</if>
+        </where>
+    </select>
+    
+    <select id="selectDataSwitchSubControlByRowId" parameterType="Long" resultMap="DataSwitchSubControlResult">
+        <include refid="selectDataSwitchSubControlVo"/>
+        where row_id = #{rowId}
+    </select>
+        
+    <insert id="insertDataSwitchSubControl" parameterType="DataSwitchSubControl" useGeneratedKeys="true" keyProperty="rowId">
+        insert into data_switch_sub_control
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mainId != null">main_id,</if>
+            <if test="dsId != null">ds_id,</if>
+            <if test="srcTbName != null">src_tb_name,</if>
+            <if test="distTbName != null">dist_tb_name,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="queryColumn != null">query_column,</if>
+            <if test="status != null">status,</if>
+            <if test="priorityLevel != null">priority_level,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mainId != null">#{mainId},</if>
+            <if test="dsId != null">#{dsId},</if>
+            <if test="srcTbName != null">#{srcTbName},</if>
+            <if test="distTbName != null">#{distTbName},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="queryColumn != null">#{queryColumn},</if>
+            <if test="status != null">#{status},</if>
+            <if test="priorityLevel != null">#{priorityLevel},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDataSwitchSubControl" parameterType="DataSwitchSubControl">
+        update data_switch_sub_control
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mainId != null">main_id = #{mainId},</if>
+            <if test="dsId != null">ds_id = #{dsId},</if>
+            <if test="srcTbName != null">src_tb_name = #{srcTbName},</if>
+            <if test="distTbName != null">dist_tb_name = #{distTbName},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="queryColumn != null">query_column = #{queryColumn},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="priorityLevel != null">priority_level = #{priorityLevel},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where row_id = #{rowId}
+    </update>
+
+    <delete id="deleteDataSwitchSubControlByRowId" parameterType="Long">
+        delete from data_switch_sub_control where row_id = #{rowId}
+    </delete>
+
+    <delete id="deleteDataSwitchSubControlByRowIds" parameterType="String">
+        delete from data_switch_sub_control where row_id in 
+        <foreach item="rowId" collection="array" open="(" separator="," close=")">
+            #{rowId}
+        </foreach>
+    </delete>
+</mapper>

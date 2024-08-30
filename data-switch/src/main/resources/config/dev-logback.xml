@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+		<!-- encoder的默认实现类是ch.qos.logback.classic.encoder.PatternLayoutEncoder -->
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%F:%L] %msg %n </pattern>
+			<!--<charset>GBK</charset>-->
+		</encoder>
+	</appender>
+
+	<logger name="com.allinpay.ipp" level="DEBUG" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="com.alibaba.druid" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<logger name="java.sql" level="INFO" additivity="false">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+	<logger name="ch.qos.logback" level="ERROR" />
+	<logger name="org.springframework" level="INFO" >
+		<appender-ref ref="STDOUT"/>
+	</logger>
+	<logger name="net.sf.ehcache" level="ERROR" />
+	<logger name="org.hibernate" level="ERROR" />
+	<logger name="org.hibernate.SQL" level="ERROR" />
+	<logger name="org.hibernate.cache" level="ERROR" />
+	<logger name="org.apache.struts2" level="ERROR" />
+	<logger name="org.apache.commons" level="ERROR" />
+	<logger name="org.apache.velocity" level="ERROR" />
+	<logger name="org.apache.tiles" level="ERROR" />
+	<logger name="freemarker" level="ERROR" />
+	<logger name="com.opensymphony.xwork2" level="ERROR" />
+	<logger name="org.apache.commons.validator.ValidatorResources"
+		level="ERROR" />
+	<logger name="org" level="ERROR" additivity="false" />
+	<logger name="com.ibatis" level="INFO" />
+
+	<root>
+		<level value="INFO" />
+	</root>
+</configuration>

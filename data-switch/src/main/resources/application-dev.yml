@@ -1,0 +1,105 @@
+spring:
+  # datasource 数据源配置内容
+  datasource:
+    basedatasource:
+      url: jdbc:mysql://127.0.0.1:3306/mysql_study_db?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+      username: root
+      password: root123
+      type: com.alibaba.druid.pool.DruidDataSource
+      driverClassName: com.mysql.cj.jdbc.Driver
+      filters: stat
+      maxActive: 100
+      initialSize: 1
+      maxWait: 10000
+      minIdle: 5
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: select 'x' from dual
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      remove-abandoned: true
+      remove-abandoned-timeout: 60
+      log-abandoned: true
+      use-unfair-lock: true
+  #配置rabbitMq 服务器
+#  rabbitmq:
+#    #addresses: 192.168.1.113:5672,192.168.1.114:5673
+#    addresses: 192.168.1.113:5672
+#    username: admin
+#    password: admin
+    #requested-channel-max: 1024
+    #requested-heartbeat: 0 #指定心跳超时，单位秒，0为不指定；默认60s
+    #cache:
+    #  connection:
+    #    mode: channel  #connection 如果使用channel模式可以复用一个连接，但是如果消息很大时可能会影响网络带宽
+    #    #size: 64
+    #  channel:
+    #    size: 64
+    #    checkout-timeout: 0 #当缓存数量被设置时，从缓存中获取一个channel的超时时间，单位毫秒；如果为0，则总是创建一个新channel
+    #connection-timeout: 0 #连接超时，单位毫秒，0表示无穷大，不超时
+
+
+#  activemq:
+#    broker-url: failover:tcp://192.168.1.64:61616?wireFormat.maxInactivityDuration=0
+#    #publisher-confirm-type: correlated
+#    #virtual-host: admin
+#    listener:
+#      simple:
+#        concurrency: 3 #消费者最小数量
+#        max-concurrency: 20 # 消费者最大数量
+#        #acknowledge-mode: manual #设置确认模式手工确认
+#  redis:
+#    host: 192.168.1.22
+#    port: 6379
+#    password: # Redis 服务器密码，默认为空。生产中，一定要设置 Redis 密码！
+#    database: 0 # Redis 数据库号，默认为 0 。
+#    timeout: 3000ms # Redis 连接超时时间，单位：毫秒。
+#    # 对应 RedisProperties.Jedis 内部类
+#    jedis:
+#      pool:
+#        max-active: 8 # 连接池最大连接数，默认为 8 。使用负数表示没有限制。
+#        max-idle: 8 # 默认连接数最小空闲的连接数，默认为 8 。使用负数表示没有限制。
+#        min-idle: 0 # 默认连接池最小空闲的连接数，默认为 0 。允许设置 0 和 正数。
+#        max-wait: 3000ms
+#  cache:
+#    cache-names: DATASWITCH_CONTROL,DATASWITCH_SUB_CONTROL,DATASWITCH_DATABASE
+#    type: caffeine
+#    caffeine:
+#      spec: initialCapacity=16,maximumSize=16000,expireAfterAccess=86400s
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: "*"
+#  endpoint:
+#    shutdown:
+#      enabled: true
+#
+#mail:
+#  sender:
+#    queuename: wds.alarm.smsDestinationName
+#    system:
+#      symbol: PRODUCER
+#    target:
+#      mails: gelb@allinpay.com;matao1@allinpay.com;sunlei@allinpay.com
+
+#logging:
+#  config: classpath:config/local-logback.xml
+
+
+#dbconfig:
+#  driver: com.ibm.db2.jcc.DB2Driver
+#  username: db2inst1
+#  password: db2Pwd_2018
+#  addr: jdbc:db2://192.168.1.16:50000/ipp:currentSchema=IPPUAT;
+#  port: 50000
+#  sid:
+#  connectTimeout: 1
+#  mqNamesrv:
+#  catchStep: 10000
+#  forwardStep: 500
+#  waitTransTime: 300
+#  retrys: 6
+#  checkPoint: checkPoint
+

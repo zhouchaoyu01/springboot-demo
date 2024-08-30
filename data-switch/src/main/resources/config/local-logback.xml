@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration>
+	<!-- -->
+	<substitutionProperty name="log.base" value="/ipplog" />
+
+	<!-- web log -->
+	<appender name="webLoggerFileOut"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>DEBUG</level>
+		</filter>
+		<file>${log.base}/producer.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.base}/producer.%d{yyyyMMdd}.%i.log
+			</FileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>500MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>[%date][%thread][%logger{0}:%line][%level] - %msg%n</pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<appender name="ibatisLoggerFileOut"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>info</level>
+		</filter>
+		<file>${log.base}/producer_ibatis.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.base}/producer_ibatis.%d{yyyyMMdd}.%i.log
+			</FileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>500MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%F:%L] %msg %n </pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+	<appender name="druidLoggerFileOut"
+			  class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>info</level>
+		</filter>
+		<file>${log.base}/producer_druid.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<FileNamePattern>${log.base}/producer_druid.%d{yyyyMMdd}.%i.log
+			</FileNamePattern>
+			<timeBasedFileNamingAndTriggeringPolicy
+					class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<!-- or whenever the file size reaches 100MB -->
+				<maxFileSize>500MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%F:%L] %msg %n </pattern>
+			<charset>UTF-8</charset>
+		</encoder>
+	</appender>
+
+
+	<logger name="com.allinpay" level="INFO" additivity="false">
+		<appender-ref ref="webLoggerFileOut" />
+	</logger>
+
+	<logger name="com.alibaba.druid" level="INFO" additivity="false">
+		<appender-ref ref="druidLoggerFileOut" />
+	</logger>
+
+	<logger name="java.sql" level="INFO" additivity="false">
+		<appender-ref ref="ibatisLoggerFileOut" />
+	</logger>
+
+	<logger name="org.springframework" level="INFO" >
+		<appender-ref ref="webLoggerFileOut" />
+	</logger>
+	<logger name="ch.qos.logback" level="ERROR" />
+	<logger name="net.sf.ehcache" level="ERROR" />
+	<logger name="org.hibernate" level="ERROR" />
+	<logger name="org.hibernate.SQL" level="ERROR" />
+	<logger name="org.hibernate.cache" level="ERROR" />
+	<logger name="org.apache.struts2" level="ERROR" />
+	<logger name="org.apache.commons" level="ERROR" />
+	<logger name="org.apache.velocity" level="ERROR" />
+	<logger name="org.apache.tiles" level="ERROR" />
+	<logger name="freemarker" level="ERROR" />
+	<logger name="com.opensymphony.xwork2" level="ERROR" />
+	<logger name="org.apache.commons.validator.ValidatorResources"
+			level="ERROR" />
+	<logger name="org" level="ERROR" additivity="false" />
+	<logger name="com.ibatis" level="INFO" />
+
+	<root>
+		<level value="INFO" />
+	</root>
+</configuration>
