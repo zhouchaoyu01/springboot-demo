@@ -1,13 +1,16 @@
 package com.dataSwitch.service.impl;
 
 
+import com.dataSwitch.base.bean.DataSwitchControl;
 import com.dataSwitch.base.bean.DataSwitchControlExt;
 import com.dataSwitch.base.bean.DataSwitchSubControl;
 import com.dataSwitch.base.bean.DatabaseConfig;
 import com.dataSwitch.base.dao.DataSwitchControlExtMapper;
+import com.dataSwitch.base.dao.DataSwitchControlMapper;
 import com.dataSwitch.base.dao.DataSwitchSubControlMapper;
 import com.dataSwitch.base.dao.DatabaseConfigMapper;
 import com.dataSwitch.service.IDataSwitchConfigService;
+import com.dataSwitch.utils.DataSwitchConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,9 +34,11 @@ public class DataSwitchConfigServiceImpl implements IDataSwitchConfigService {
 //    private CompareSubTaskMapper compareSubTaskMapper;
 //    @Autowired
 //    private CompareMainTaskMapper compareMainTaskMapper;
-    @Autowired
+    @Resource
+    private DataSwitchControlMapper dataSwitchControlMapper;
+    @Resource
     private DataSwitchSubControlMapper dataSwitchSubControlMapper;
-    @Autowired
+    @Resource
     private DataSwitchControlExtMapper dataSwitchControlExtMapper;
 //    @Autowired
 //    private CompareMainTaskMapperExt compareMainTaskMapperExt;
@@ -67,13 +72,13 @@ public class DataSwitchConfigServiceImpl implements IDataSwitchConfigService {
 //    }
 //
 //    @Cacheable(value = CACHE_DATASWITCH_CONTROL,key = "'getAllDataSwitchControl_*'",unless = "#result == null")
-//    public List<DataSwitchControl> getAllDataSwitchControl()
-//    {
-//        DataSwitchControlExample example = new DataSwitchControlExample();
-//        example.createCriteria().andStatusEqualTo(DataSwitchConstants.STATUS_0);//状态：0 开通
-//        return dataSwitchControlMapper.selectByExample(example);
-//    }
-//
+    public List<DataSwitchControl> getAllDataSwitchControl()
+    {
+        DataSwitchControl dataSwitchControl = new DataSwitchControl();
+        dataSwitchControl.setStatus(DataSwitchConstants.STATUS_0);//状态：0 开通
+        return dataSwitchControlMapper.selectDataSwitchControlList(dataSwitchControl);
+    }
+
     public List<DataSwitchControlExt> getAllDataSwitchControlByPriority()
     {
         return dataSwitchControlExtMapper.selectAllByPriority();
@@ -125,17 +130,12 @@ public class DataSwitchConfigServiceImpl implements IDataSwitchConfigService {
 //     * @return
 //     */
 //    @Cacheable(value = CACHE_DATASWITCH_SUB_CONTROL,key = "'getDataSwitchSubControlByMainId_'+#id+'_'+#sourceType",unless = "#result == null")
-//    @Override
-//    public List<DataSwitchSubControl> getDataSwitchSubControlByMainId(Long id,String sourceType) {
-//        DataSwitchSubControlExample example = new DataSwitchSubControlExample();
-//        DataSwitchSubControlExample.Criteria criteria = example.createCriteria();
-//        if(null!=id)
-//        {
-//            criteria.andMainIdEqualTo(id);
-//        }
-//        criteria.andSourceTypeEqualTo(sourceType).andStatusEqualTo(DataSwitchConstants.STATUS_0);
-//        return dataSwitchSubControlMapper.selectByExample(example);
-//    }
+    @Override
+    public List<DataSwitchSubControl> getDataSwitchSubControlByMainId(Long id) {
+        DataSwitchSubControl example = new DataSwitchSubControl();
+        example.setMainId(id);
+        return dataSwitchSubControlMapper.selectDataSwitchSubControlList(example);
+    }
 //
     public List<DataSwitchSubControl> getDataSwitchSubControlByMainIdAndPriority(Long id, String sourceType, String priority) {
         DataSwitchSubControl dataSwitchSubControl = new DataSwitchSubControl();

@@ -8,11 +8,11 @@ public class DataSwitchConstants {
     /**
      * 批量消息发送使用32个队列
      */
-    public static final int QUEUE_SIZE = 32;
+    public static final int QUEUE_SIZE = 16;
     /**
      * 单笔消息发送使用16个队列
      */
-    public static final int SINGLE_QUEUE_SIZE = 16;
+    public static final int SINGLE_QUEUE_SIZE = 8;
 
     /**
      *

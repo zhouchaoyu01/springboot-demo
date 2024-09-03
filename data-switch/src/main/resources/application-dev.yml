@@ -49,19 +49,19 @@ spring:
 #        concurrency: 3 #消费者最小数量
 #        max-concurrency: 20 # 消费者最大数量
 #        #acknowledge-mode: manual #设置确认模式手工确认
-#  redis:
-#    host: 192.168.1.22
-#    port: 6379
-#    password: # Redis 服务器密码，默认为空。生产中，一定要设置 Redis 密码！
-#    database: 0 # Redis 数据库号，默认为 0 。
-#    timeout: 3000ms # Redis 连接超时时间，单位：毫秒。
-#    # 对应 RedisProperties.Jedis 内部类
-#    jedis:
-#      pool:
-#        max-active: 8 # 连接池最大连接数，默认为 8 。使用负数表示没有限制。
-#        max-idle: 8 # 默认连接数最小空闲的连接数，默认为 8 。使用负数表示没有限制。
-#        min-idle: 0 # 默认连接池最小空闲的连接数，默认为 0 。允许设置 0 和 正数。
-#        max-wait: 3000ms
+  redis:
+    host: 192.168.26.143
+    port: 6379
+    password: foobared # Redis 服务器密码，默认为空。生产中，一定要设置 Redis 密码！
+    database: 14 # Redis 数据库号，默认为 0 。
+    timeout: 3000ms # Redis 连接超时时间，单位：毫秒。
+    # 对应 RedisProperties.Jedis 内部类
+    jedis:
+      pool:
+        max-active: 8 # 连接池最大连接数，默认为 8 。使用负数表示没有限制。
+        max-idle: 8 # 默认连接数最小空闲的连接数，默认为 8 。使用负数表示没有限制。
+        min-idle: 0 # 默认连接池最小空闲的连接数，默认为 0 。允许设置 0 和 正数。
+        max-wait: 3000ms
 #  cache:
 #    cache-names: DATASWITCH_CONTROL,DATASWITCH_SUB_CONTROL,DATASWITCH_DATABASE
 #    type: caffeine
@@ -102,4 +102,12 @@ spring:
 #  waitTransTime: 300
 #  retrys: 6
 #  checkPoint: checkPoint
+
+#b
+bank:
+  url: http://localhost:9302
+  appId:
+  extPublicKey: 04e654f7d9a51e8c6ea2d52ca2cb3487ca2d1720a7ff8bf92a38e5d429aeacc9b47e15ef72f8e4fa39693451a017b7af9f76176e29a0616761f6add68cfddefeaa
+  publicKey: 0489980694d803e0f81f08ae9f2373e03a13118912c172f1d39d79cd0844bb46b684bf22b5e320ec96b3af876c2e0d9e58b5cdbc964aa0d37cc73432515596e508
+  privateKey: 00ae55e1dd9caf6bafb1218359fb430c36a4cdd9daaa7ee08715754628a7f92b77
 

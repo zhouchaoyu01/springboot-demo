@@ -1,5 +1,6 @@
 package com.dataSwitch.service;
 
+import com.dataSwitch.base.bean.DataSwitchControl;
 import com.dataSwitch.base.bean.DataSwitchControlExt;
 import com.dataSwitch.base.bean.DataSwitchSubControl;
 import com.dataSwitch.base.bean.DatabaseConfig;
@@ -19,7 +20,7 @@ public interface IDataSwitchConfigService {
 //
 //    void refreshDataSwitchControlById(Long id);
 //
-//    List<DataSwitchControl> getAllDataSwitchControl();
+    List<DataSwitchControl> getAllDataSwitchControl();
 //
     List<DataSwitchControlExt> getAllDataSwitchControlByPriority();
 //
@@ -57,7 +58,7 @@ public interface IDataSwitchConfigService {
 //
 //    CompareMainTask getLastMainTask(Long dscId);
 //
-//    List<DataSwitchSubControl> getDataSwitchSubControlByMainId(Long id,String sourceType);
+    List<DataSwitchSubControl> getDataSwitchSubControlByMainId(Long id);
 
     List<DataSwitchSubControl> getDataSwitchSubControlByMainIdAndPriority(Long id, String sourceType, String priority);
 

@@ -3,8 +3,11 @@ package com.dataSwitch.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dataSwitch.base.common.MessageModel;
+import com.dataSwitch.http.BizParameter;
+import com.dataSwitch.http.TxResponse;
 import com.dataSwitch.service.IQueueProcessor;
 import com.dataSwitch.utils.DataSwitchConstants;
+import com.dataSwitch.utils.TxClient;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,9 @@ public class ProduceQueueProcessor implements IQueueProcessor {
 
 //    @Autowired
 //    private RabbitMqService rabbitMqService;
+
+    @Autowired
+    private TxClient txClient;
 
     /**
      * 批量消息发送 TODO 阻塞 调用API送给数经平台
@@ -43,9 +49,15 @@ public class ProduceQueueProcessor implements IQueueProcessor {
 //                    exchange=DataSwitchConstants.DIRECT_EXCHANGE_DATASWITCH_EXTRACTION;
 //                    routeKey=DataSwitchConstants.DIRECT_EXCHANGE_QUEUE_BINDING_EXTRACTING+key;
 //                }
+//                MessageModel obj = (MessageModel) message;
+//                logger.info(JSONObject.toJSONString(message));
+                String url = "http://localhost:9302/test/data";
+                BizParameter bizParameter = new BizParameter();
+                bizParameter.put("data", message);
+                TxResponse txResponse = txClient.sendRequest("1", bizParameter, url);
+                logger.info(txResponse);
 
-                //todo:
-                logger.info(JSONObject.toJSONString(message));
+
 //                Message msg = new Message(JSONObject.toJSONString(message).getBytes("UTF-8"),properties);
 //                rabbitMqService.send(exchange, routeKey, msg);
                 logger.debug("===ProduceQueueProcessor process success.===");
@@ -68,9 +80,6 @@ public class ProduceQueueProcessor implements IQueueProcessor {
     public void singleProcess(Object message, String key) {
         try {
             if (null != message) {
-                MessageModel obj=(MessageModel)message;
-                logger.info(obj.toString());
-
 //                MessageProperties properties = new MessageProperties();
 //                properties.setContentType("text/plain");
 //                //properties.setMessageId(msgId);
@@ -86,6 +95,14 @@ public class ProduceQueueProcessor implements IQueueProcessor {
 //                }
 //                Message msg = new Message(JSONObject.toJSONString(message).getBytes("UTF-8"),properties);
 //                rabbitMqService.send(exchange,routeKey, msg);
+
+//MessageModel obj=(MessageModel)message;
+                String url = "http://localhost:9302/test/data";
+                BizParameter bizParameter = new BizParameter();
+                bizParameter.put("data", message);
+                TxResponse txResponse = txClient.sendRequest("1", bizParameter, url);
+                logger.info(txResponse);
+
                 logger.debug("===ProduceQueueProcessor singleProcess success.===");
             } else {
                 logger.info("===message is null.===");

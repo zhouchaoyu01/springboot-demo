@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dataSwitch.base.dao.DataSwitchControlMapper">
+    
+    <resultMap type="DataSwitchControl" id="DataSwitchControlResult">
+        <result property="rowId"    column="row_id"    />
+        <result property="srcDsId"    column="src_ds_id"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="catchStep"    column="catch_Step"    />
+        <result property="forwardStep"    column="forward_step"    />
+        <result property="waitTransTime"    column="wait_trans_time"    />
+        <result property="retrys"    column="retrys"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectDataSwitchControlVo">
+        select row_id, src_ds_id, start_time, catch_Step, forward_step, wait_trans_time, retrys, status, create_time, update_time from data_switch_control
+    </sql>
+
+    <select id="selectDataSwitchControlList" parameterType="DataSwitchControl" resultMap="DataSwitchControlResult">
+        <include refid="selectDataSwitchControlVo"/>
+        <where>  
+            <if test="srcDsId != null "> and src_ds_id = #{srcDsId}</if>
+            <if test="startTime != null  and startTime != ''"> and start_time = #{startTime}</if>
+            <if test="catchStep != null "> and catch_Step = #{catchStep}</if>
+            <if test="forwardStep != null "> and forward_step = #{forwardStep}</if>
+            <if test="waitTransTime != null "> and wait_trans_time = #{waitTransTime}</if>
+            <if test="retrys != null "> and retrys = #{retrys}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectDataSwitchControlByRowId" parameterType="Long" resultMap="DataSwitchControlResult">
+        <include refid="selectDataSwitchControlVo"/>
+        where row_id = #{rowId}
+    </select>
+        
+    <insert id="insertDataSwitchControl" parameterType="DataSwitchControl" useGeneratedKeys="true" keyProperty="rowId">
+        insert into data_switch_control
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="srcDsId != null">src_ds_id,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="catchStep != null">catch_Step,</if>
+            <if test="forwardStep != null">forward_step,</if>
+            <if test="waitTransTime != null">wait_trans_time,</if>
+            <if test="retrys != null">retrys,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="srcDsId != null">#{srcDsId},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="catchStep != null">#{catchStep},</if>
+            <if test="forwardStep != null">#{forwardStep},</if>
+            <if test="waitTransTime != null">#{waitTransTime},</if>
+            <if test="retrys != null">#{retrys},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDataSwitchControl" parameterType="DataSwitchControl">
+        update data_switch_control
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="srcDsId != null">src_ds_id = #{srcDsId},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="catchStep != null">catch_Step = #{catchStep},</if>
+            <if test="forwardStep != null">forward_step = #{forwardStep},</if>
+            <if test="waitTransTime != null">wait_trans_time = #{waitTransTime},</if>
+            <if test="retrys != null">retrys = #{retrys},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where row_id = #{rowId}
+    </update>
+
+    <delete id="deleteDataSwitchControlByRowId" parameterType="Long">
+        delete from data_switch_control where row_id = #{rowId}
+    </delete>
+
+    <delete id="deleteDataSwitchControlByRowIds" parameterType="String">
+        delete from data_switch_control where row_id in 
+        <foreach item="rowId" collection="array" open="(" separator="," close=")">
+            #{rowId}
+        </foreach>
+    </delete>
+</mapper>

@@ -12,12 +12,12 @@ import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 生产者批量组包线程
- *
+ * <p>
  * Created by sunlei on 2020/12/30.
  */
 public class ProducerBatchExecutor extends Thread {
     private static Log logger = LogFactory.getLog(ProducerBatchExecutor.class);
-    public static final int MAX_SIZE = 5;   //集合最大等待大小
+    public static final int MAX_SIZE = 10;   //集合最大等待大小
     public static final long MAX_WAIT = 1;  //集合最大等待时间(ms)
     private long excTime = 0;
     private IQueueProcessor processor;
@@ -26,50 +26,52 @@ public class ProducerBatchExecutor extends Thread {
 
     private List<MessageModel> msgList;
 
-    public ProducerBatchExecutor(){};
+    public ProducerBatchExecutor() {
+    }
 
-    public ProducerBatchExecutor(IQueueProcessor processor, String key)
-    {
+    ;
+
+    public ProducerBatchExecutor(IQueueProcessor processor, String key) {
         this.processor = processor;
         this.key = key;
         msgList = new ArrayList<>();
-        this.lock=new ReentrantLock();
+        this.lock = new ReentrantLock();
     }
 
     @Override
     public void run() {
-        while (true)
-        {
+        while (true) {
             try {
                 addMsg(null);
                 Thread.sleep(MAX_WAIT);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 logger.error(e);
             }
         }
     }
 
-    public synchronized void addMsg(MessageModel msg)
-    {
+    public synchronized void addMsg(MessageModel msg) {
         try {
-            long currentTime = System.currentTimeMillis();
-            long offset = currentTime - excTime;
-            if(null!= msg)
-            {
+//            long currentTime = System.currentTimeMillis();
+//            long offset = currentTime - excTime;
+            if (null != msg) {
                 msgList.add(msg);
             }
-            if(msgList.size() > MAX_SIZE || (msgList.size()>0 && offset >= MAX_WAIT ))
-            {
-                logger.info("batch addMsg size:"+msgList.size());
-                processor.process(msgList,key);
+//            if(msgList.size() > MAX_SIZE || (msgList.size()>0 && offset >= MAX_WAIT ))
+            if (msgList.size() > MAX_SIZE) {
+                logger.info("batch addMsg size:" + msgList.size());
+                processor.process(msgList, key);
                 msgList.clear();
-                excTime = currentTime;
+//                excTime = currentTime;
             }
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             logger.error(e);
+        } finally {
+            if(msgList!=null && msgList.size() > 0){
+                logger.info("last size:" + msgList.size());
+                processor.process(msgList, key);
+                msgList.clear();
+            }
         }
     }
 

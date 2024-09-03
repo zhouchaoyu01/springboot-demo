@@ -10,6 +10,7 @@ import com.dataSwitch.service.IDataSwitchConfigService;
 import com.dataSwitch.service.ProducerService;
 import com.dataSwitch.config.WhileConfig;
 import com.dataSwitch.config.ds.DbContextHolder;
+import com.dataSwitch.utils.DataSwitchConstants;
 import com.dataSwitch.utils.DataUtil;
 import com.dataSwitch.utils.RedisUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -116,12 +117,12 @@ public class ProducerThread implements Runnable {
                         dataSwitchSubControl.setStartTime(nextStr);//记录时间点，作为下次的起始时间点
                         //timestart = nextStr;
                         logger.info("处理记录总数: " + totalCount);
-//                        //将时间塞入redis中
-//                        final String time = startStr;
-//                        timeReloadThreadPool.execute(() -> {
-//                            //时间点记在了sub任务表上，key值用主表主键+"_"+sub表主键
-//                            redisUtils.hmSet(DataSwitchConstants.START_TIME_REDIS_KEY, DataSwitchConstants.getDataSwitchControlKey(dataSwitchSubControl.getMainId()+"",dataSwitchSubControl.getRowId()+""), time);
-//                        });
+                        //将时间塞入redis中
+                        final String time = startStr;
+                        timeReloadThreadPool.execute(() -> {
+                            //时间点记在了sub任务表上，key值用主表主键+"_"+sub表主键
+                            redisUtils.hmSet(DataSwitchConstants.START_TIME_REDIS_KEY, DataSwitchConstants.getDataSwitchControlKey(dataSwitchSubControl.getMainId()+"",dataSwitchSubControl.getRowId()+""), time);
+                        });
                     } catch (Exception e) {
                         logger.info("Producer occurs error.", e);
                         /*
@@ -193,24 +194,24 @@ public class ProducerThread implements Runnable {
                 try {
                     // 获取数据库当前时间
 //                    String nowDBDateString = dbDirectService.getDBCurrentDateTime(conn, databaseConfig.getDbDriver());
-                    String nowDBDateString = "2024-08-29 16:31:00.000";//TODO
+                    String nowDBDateString = "2024-08-29 16:33:00.000";//TODO
                     //注意这里时间格式SSS精确到毫秒，如果数据库是精确到微秒 则需要对时间字符串进行截取，忽略掉微秒部分，否则导致时间比较出错.需要留意忽略掉微秒部分在数据库中的比较是否符合业务逻辑
                     logger.info("记录开始时间: " + timestart + "数据库当前时间: " + nowDBDateString);
 
                     //获取查询结束时间
                     String nextStr = calculateNextTime(timestart, nowDBDateString, dsc);
 
-                    //发送mq todo
+                    //发送mq
                     int thisCount = producerService.sendRecord(conn, timestart, nextStr, dsc, dataSwitchSubControl, databaseConfig.getDbDriver());
                     totalCount = totalCount + thisCount;
                     timestart = nextStr;
                     dataSwitchSubControl.setStartTime(nextStr);//记录时间点
                     logger.info("处理记录总数: " + totalCount);
-//                    //将时间塞入redis中
-//                    final String time =timestart;
-//                    timeReloadThreadPool.execute(()->{
-//                        redisUtils.hmSet(DataSwitchConstants.START_TIME_REDIS_KEY,DataSwitchConstants.getDataSwitchControlKey(dataSwitchSubControl.getMainId()+"",dataSwitchSubControl.getRowId()+""),time);
-//                    });
+                    //将时间塞入redis中
+                    final String time =timestart;
+                    timeReloadThreadPool.execute(()->{
+                        redisUtils.hmSet(DataSwitchConstants.START_TIME_REDIS_KEY,DataSwitchConstants.getDataSwitchControlKey(dataSwitchSubControl.getMainId()+"",dataSwitchSubControl.getRowId()+""),time);
+                    });
                 } catch (Exception e) {
                     logger.info("Producer occurs error.", e);
                     /*final String excptionTime = timestart;
