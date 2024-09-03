@@ -4,6 +4,7 @@ package com.dataSwitch.producer;
 import com.dataSwitch.base.bean.DataSwitchControlExt;
 import com.dataSwitch.base.bean.DataSwitchSubControl;
 import com.dataSwitch.base.bean.DatabaseConfig;
+import com.dataSwitch.base.bean.ExceptionPointRecord;
 import com.dataSwitch.base.common.DataSwitchException;
 import com.dataSwitch.service.DbDirectService;
 import com.dataSwitch.service.IDataSwitchConfigService;
@@ -121,30 +122,30 @@ public class ProducerThread implements Runnable {
                         final String time = startStr;
                         timeReloadThreadPool.execute(() -> {
                             //时间点记在了sub任务表上，key值用主表主键+"_"+sub表主键
-                            redisUtils.hmSet(DataSwitchConstants.START_TIME_REDIS_KEY, DataSwitchConstants.getDataSwitchControlKey(dataSwitchSubControl.getMainId()+"",dataSwitchSubControl.getRowId()+""), time);
+                            redisUtils.hmSet(DataSwitchConstants.START_TIME_REDIS_KEY, DataSwitchConstants.getDataSwitchControlKey(dataSwitchSubControl.getMainId() + "", dataSwitchSubControl.getRowId() + ""), time);
                         });
                     } catch (Exception e) {
                         logger.info("Producer occurs error.", e);
-                        /*
+
                         final String excptionTime = startStr;
                         //1.记录时间断点; 2.发送告警邮件
                         exceptionThreadPool.execute(() -> {
-                            DbContextHolder.clearDbType();
-                            //记录异常时间点
-                            ExceptionPointRecord exceptionPointRecord = new ExceptionPointRecord();
-                            exceptionPointRecord.setDscId(dsc.getRowId());
-                            exceptionPointRecord.setExceptionTime(excptionTime);
-                            exceptionPointRecord.setExceptionCause(e.getMessage().length() > 1024 ? e.getMessage().substring(0, 1024) : e.getMessage());
-                            exceptionPointRecord.setStatus("0");
-                            exceptionPointRecord.setCreateTime(new Date());
-                            exceptionPointRecord.setLastModifyTime(new Date());
-                            dataSwitchConfigService.saveRecord(exceptionPointRecord);
-                            //发送告警
-                            String msg = "Producer occurs error,current datetime: " + (new Date()) + ",excptionTime: " + excptionTime + ", error detail: " + e.getMessage();
-                            //mailMessageSender.sendMailMessage(msg,"生产者异常告警");
-                        }
+                                    DbContextHolder.clearDbType();
+                                    //记录异常时间点
+                                    ExceptionPointRecord exceptionPointRecord = new ExceptionPointRecord();
+                                    exceptionPointRecord.setDscId(dsc.getRowId());
+                                    exceptionPointRecord.setExceptionTime(excptionTime);
+                                    exceptionPointRecord.setExceptionCause(e.getMessage().length() > 1024 ? e.getMessage().substring(0, 1024) : e.getMessage());
+                                    exceptionPointRecord.setStatus("0");
+                                    exceptionPointRecord.setCreateTime(new Date());
+                                    exceptionPointRecord.setLastModifyTime(new Date());
+                                    dataSwitchConfigService.saveRecord(exceptionPointRecord);
+                                    //发送告警
+                                    String msg = "Producer occurs error,current datetime: " + (new Date()) + ",excptionTime: " + excptionTime + ", error detail: " + e.getMessage();
+                                    //mailMessageSender.sendMailMessage(msg,"生产者异常告警");
+                                }
                         );
-                         */
+
                     } finally {
                         //清空数据源
                         dbDirectService.closeConnection(conn, null, null);
@@ -208,31 +209,31 @@ public class ProducerThread implements Runnable {
                     dataSwitchSubControl.setStartTime(nextStr);//记录时间点
                     logger.info("处理记录总数: " + totalCount);
                     //将时间塞入redis中
-                    final String time =timestart;
-                    timeReloadThreadPool.execute(()->{
-                        redisUtils.hmSet(DataSwitchConstants.START_TIME_REDIS_KEY,DataSwitchConstants.getDataSwitchControlKey(dataSwitchSubControl.getMainId()+"",dataSwitchSubControl.getRowId()+""),time);
+                    final String time = timestart;
+                    timeReloadThreadPool.execute(() -> {
+                        redisUtils.hmSet(DataSwitchConstants.START_TIME_REDIS_KEY, DataSwitchConstants.getDataSwitchControlKey(dataSwitchSubControl.getMainId() + "", dataSwitchSubControl.getRowId() + ""), time);
                     });
                 } catch (Exception e) {
                     logger.info("Producer occurs error.", e);
-                    /*final String excptionTime = timestart;
+                    final String excptionTime = timestart;
                     //1.记录时间断点; 2.发送告警邮件
-                    exceptionThreadPool.execute(()->{
+                    exceptionThreadPool.execute(() -> {
                         DbContextHolder.clearDbType();
                         //记录异常时间点
                         ExceptionPointRecord exceptionPointRecord = new ExceptionPointRecord();
                         exceptionPointRecord.setDscId(dsc.getRowId());
                         exceptionPointRecord.setExceptionTime(excptionTime);
-                        exceptionPointRecord.setExceptionCause(e.getMessage().length()>1024 ? e.getMessage().substring(0,1024) : e.getMessage());
+                        exceptionPointRecord.setExceptionCause(e.getMessage().length() > 1024 ? e.getMessage().substring(0, 1024) : e.getMessage());
                         exceptionPointRecord.setStatus("0");
                         exceptionPointRecord.setCreateTime(new Date());
                         exceptionPointRecord.setLastModifyTime(new Date());
                         dataSwitchConfigService.saveRecord(exceptionPointRecord);
                         //发送告警
-                        String msg = "Producer occurs error,current datetime: " + (new Date()) +",excptionTime: " + excptionTime + ", error detail: "+e.getMessage();
+                        String msg = "Producer occurs error,current datetime: " + (new Date()) + ",excptionTime: " + excptionTime + ", error detail: " + e.getMessage();
                         //mailMessageSender.sendMailMessage(msg,"生产者异常告警");
                     });
 
-                     */
+
                 }
             }
         } catch (Exception e) {

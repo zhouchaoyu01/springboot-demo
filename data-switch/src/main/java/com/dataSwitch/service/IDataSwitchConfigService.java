@@ -1,9 +1,6 @@
 package com.dataSwitch.service;
 
-import com.dataSwitch.base.bean.DataSwitchControl;
-import com.dataSwitch.base.bean.DataSwitchControlExt;
-import com.dataSwitch.base.bean.DataSwitchSubControl;
-import com.dataSwitch.base.bean.DatabaseConfig;
+import com.dataSwitch.base.bean.*;
 
 import java.util.List;
 
@@ -38,7 +35,7 @@ public interface IDataSwitchConfigService {
 //
     void updateSubControlStartTime(DataSwitchSubControl dataSwitchSubControl);
 //
-//    void saveRecord(ExceptionPointRecord record);
+    void saveRecord(ExceptionPointRecord record);
 //
 //    List<ExceptionPointRecord> getAllExcptionRecord(Date nowDate);
 //

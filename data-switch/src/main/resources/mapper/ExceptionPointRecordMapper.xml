@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dataSwitch.base.dao.ExceptionPointRecordMapper">
+    
+    <resultMap type="ExceptionPointRecord" id="ExceptionPointRecordResult">
+        <result property="rowId"    column="row_id"    />
+        <result property="dscId"    column="dsc_id"    />
+        <result property="exceptionTime"    column="exception_time"    />
+        <result property="exceptionCause"    column="exception_cause"    />
+        <result property="status"    column="status"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="lastModifyTime"    column="last_modify_time"    />
+    </resultMap>
+
+    <sql id="selectExceptionPointRecordVo">
+        select row_id, dsc_id, exception_time, exception_cause, status, create_time, last_modify_time from exception_point_record
+    </sql>
+
+    <select id="selectExceptionPointRecordList" parameterType="ExceptionPointRecord" resultMap="ExceptionPointRecordResult">
+        <include refid="selectExceptionPointRecordVo"/>
+        <where>  
+            <if test="dscId != null "> and dsc_id = #{dscId}</if>
+            <if test="exceptionTime != null  and exceptionTime != ''"> and exception_time = #{exceptionTime}</if>
+            <if test="exceptionCause != null  and exceptionCause != ''"> and exception_cause = #{exceptionCause}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="lastModifyTime != null "> and last_modify_time = #{lastModifyTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectExceptionPointRecordByRowId" parameterType="Long" resultMap="ExceptionPointRecordResult">
+        <include refid="selectExceptionPointRecordVo"/>
+        where row_id = #{rowId}
+    </select>
+        
+    <insert id="insertExceptionPointRecord" parameterType="ExceptionPointRecord" useGeneratedKeys="true" keyProperty="rowId">
+        insert into exception_point_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dscId != null">dsc_id,</if>
+            <if test="exceptionTime != null">exception_time,</if>
+            <if test="exceptionCause != null">exception_cause,</if>
+            <if test="status != null">status,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="lastModifyTime != null">last_modify_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dscId != null">#{dscId},</if>
+            <if test="exceptionTime != null">#{exceptionTime},</if>
+            <if test="exceptionCause != null">#{exceptionCause},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="lastModifyTime != null">#{lastModifyTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateExceptionPointRecord" parameterType="ExceptionPointRecord">
+        update exception_point_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dscId != null">dsc_id = #{dscId},</if>
+            <if test="exceptionTime != null">exception_time = #{exceptionTime},</if>
+            <if test="exceptionCause != null">exception_cause = #{exceptionCause},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="lastModifyTime != null">last_modify_time = #{lastModifyTime},</if>
+        </trim>
+        where row_id = #{rowId}
+    </update>
+
+    <delete id="deleteExceptionPointRecordByRowId" parameterType="Long">
+        delete from exception_point_record where row_id = #{rowId}
+    </delete>
+
+    <delete id="deleteExceptionPointRecordByRowIds" parameterType="String">
+        delete from exception_point_record where row_id in 
+        <foreach item="rowId" collection="array" open="(" separator="," close=")">
+            #{rowId}
+        </foreach>
+    </delete>
+</mapper>

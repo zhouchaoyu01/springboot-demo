@@ -1,14 +1,8 @@
 package com.dataSwitch.service.impl;
 
 
-import com.dataSwitch.base.bean.DataSwitchControl;
-import com.dataSwitch.base.bean.DataSwitchControlExt;
-import com.dataSwitch.base.bean.DataSwitchSubControl;
-import com.dataSwitch.base.bean.DatabaseConfig;
-import com.dataSwitch.base.dao.DataSwitchControlExtMapper;
-import com.dataSwitch.base.dao.DataSwitchControlMapper;
-import com.dataSwitch.base.dao.DataSwitchSubControlMapper;
-import com.dataSwitch.base.dao.DatabaseConfigMapper;
+import com.dataSwitch.base.bean.*;
+import com.dataSwitch.base.dao.*;
 import com.dataSwitch.service.IDataSwitchConfigService;
 import com.dataSwitch.utils.DataSwitchConstants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +22,8 @@ public class DataSwitchConfigServiceImpl implements IDataSwitchConfigService {
 //    private DataSwitchControlMapper dataSwitchControlMapper;
     @Resource
     private DatabaseConfigMapper databaseConfigMapper;
-//    @Autowired
-//    private ExceptionPointRecordMapper exceptionPointRecordMapper;
+    @Resource
+    private ExceptionPointRecordMapper exceptionPointRecordMapper;
 //    @Autowired
 //    private CompareSubTaskMapper compareSubTaskMapper;
 //    @Autowired
@@ -176,10 +170,10 @@ public class DataSwitchConfigServiceImpl implements IDataSwitchConfigService {
         dataSwitchSubControlMapper.updateDataSwitchSubControl(dataSwitchSubControl);
     }
 //
-//    public void saveRecord(ExceptionPointRecord record)
-//    {
-//        exceptionPointRecordMapper.insertSelective(record);
-//    }
+    public void saveRecord(ExceptionPointRecord record)
+    {
+        exceptionPointRecordMapper.insertExceptionPointRecord(record);
+    }
 //
 //    public List<ExceptionPointRecord> getAllExcptionRecord(Date nowDate)
 //    {
