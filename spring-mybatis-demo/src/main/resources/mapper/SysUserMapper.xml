@@ -3,8 +3,4 @@
 
 <mapper namespace="com.coding.mapper.SysUserMapper">
 
-    <select id="findAllUsers" resultType="com.coding.entity.SysUser">
-        select user_id, user_name, password
-        from sys_user
-    </select>
 </mapper>

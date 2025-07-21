@@ -18,7 +18,6 @@
         <module>batchExcelData-import-export</module>
         <module>mdc-thread-log-trace</module>
         <module>openAPI-rsa</module>
-        <module>openAPI-rsa/service-a</module>
         <module>data-switch</module>
     </modules>
 

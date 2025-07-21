@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.coding.mapper.ChannelTransactionMapper">
+
+    <resultMap id="BaseResultMap" type="com.coding.entity.ChannelTransaction">
+            <result property="channelOrderId" column="channel_order_id" jdbcType="VARCHAR"/>
+            <result property="orderId" column="order_id" jdbcType="VARCHAR"/>
+            <result property="amount" column="amount" jdbcType="DECIMAL"/>
+            <result property="channelStatus" column="channel_status" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        channel_order_id,order_id,amount,
+        channel_status
+    </sql>
+    <insert id="insertBatch">
+        insert into channel_transaction (channel_order_id,order_id,amount,channel_status)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.channelOrderId},#{item.orderId},#{item.amount},#{item.channelStatus})
+        </foreach>
+    </insert>
+    <select id="selectByOrderIds" resultType="com.coding.entity.ChannelTransaction">
+        select
+        <include refid="Base_Column_List"/>
+        from channel_transaction
+        where order_id in
+        <foreach item="item" collection="orderIds" separator="," open="(" close=")" index="">
+            #{item}
+        </foreach>
+        order by order_id
+    </select>
+</mapper>

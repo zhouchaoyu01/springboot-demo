@@ -17,13 +17,18 @@ import java.util.List;
 @RestController
 public class SysUserController {
 
-    @Autowired
-    private SysUserService sysUserService;
-
-    @GetMapping("/users")
-    public List<SysUser> getUsers(){
-        return sysUserService.getAllUsers();
-    }
+//    @Autowired
+//    private SysUserService sysUserService;
+//
+//    @GetMapping("/users")
+//    public List<SysUser> getUsers(){
+//        return sysUserService.getAllUsers();
+//    }
+//
+//
+//    public static void main(String[] args) {
+//
+//    }
 
 
 }

@@ -15,9 +15,9 @@ public class SysUserServiceImpl implements SysUserService {
     @Autowired
     private SysUserMapper sysUserMapper;
 
-    @Override
-    public List<SysUser> getAllUsers() {
-        return sysUserMapper.findAllUsers();
-    }
+//    @Override
+//    public List<SysUser> getAllUsers() {
+//        return sysUserMapper.findAllUsers();
+//    }
 
 }

@@ -2,5 +2,5 @@
 mybatis:
   mapper-locations: classpath:mapper/*.xml
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql
     map-underscore-to-camel-case: true #自动驼峰转化

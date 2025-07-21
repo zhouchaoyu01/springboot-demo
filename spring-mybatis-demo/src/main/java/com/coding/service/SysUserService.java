@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface SysUserService {
 
-    List<SysUser> getAllUsers();
+//    List<SysUser> getAllUsers();
 
 
 }

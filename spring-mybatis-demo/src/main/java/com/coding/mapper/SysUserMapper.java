@@ -15,7 +15,7 @@ import java.util.List;
 @Mapper
 public interface SysUserMapper  {
 
-    List<SysUser> findAllUsers();
+//    List<SysUser> findAllUsers();
 
 
 }
