@@ -10,6 +10,7 @@
         <option value="$PROJECT_DIR$/spring-rocketmq-demo/order-center/pom.xml" />
         <option value="$PROJECT_DIR$/spring-rocketmq-demo/points-center/pom.xml" />
         <option value="$PROJECT_DIR$/spring-rocketmq-demo/rocket-producer/pom.xml" />
+        <option value="$PROJECT_DIR$/reconciliation/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
