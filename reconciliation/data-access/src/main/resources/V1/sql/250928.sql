@@ -182,7 +182,7 @@ VALUES
     ('WX_CLEARING_EXCEL', 5, '微信订单号', 'channel_txn_id', 'string', NULL, NULL, NULL, 1),
     ('WX_CLEARING_EXCEL', 12, '应结订单金额', 'amount', 'decimal', NULL, '元', NULL, 1),
     ('WX_CLEARING_EXCEL', 22, '手续费', 'fee', 'decimal', NULL, '元', NULL, 0),
-    ('WX_CLEARING_EXCEL', 9, '交易状态', 'status', 'string', NULL, NULL, '{\"支付成功\":\"SUCCESS\",\"退款\":\"REFUND\"}', 1),
+    ('WX_CLEARING_EXCEL', 9, '交易状态', 'status', 'enum', NULL, NULL, '{\"支付成功\":\"SUCCESS\",\"退款\":\"REFUND\"}', 1),
     ('WX_CLEARING_EXCEL', 8, '交易类型', 'biz_type', 'string', NULL, NULL, NULL, 0);
 
 
