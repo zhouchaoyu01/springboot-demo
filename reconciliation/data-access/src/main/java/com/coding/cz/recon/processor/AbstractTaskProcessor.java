@@ -7,9 +7,13 @@ import com.coding.cz.recon.repository.TaskConfigRepository;
 import com.coding.cz.recon.repository.TaskExecutionLogRepository;
 import com.coding.cz.recon.service.ParserRuleService;
 import com.coding.cz.recon.service.StandardTransactionService;
+import com.coding.cz.recon.util.DataTransformer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
@@ -17,6 +21,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,25 +30,38 @@ import java.util.Map;
  * @author: zhouchaoyu
  * @Date: 2025-09-26
  */
+
 public abstract class AbstractTaskProcessor {
 
 
     protected final TaskConfigRepository taskConfigRepository;
     protected final ParserRuleService parserRuleService;
     protected final TaskExecutionLogRepository logRepository;
-    protected final StandardTransactionService standardTransactionService;
+    protected final DynamicSqlExecutor dynamicSqlExecutor;
+//    protected final StandardTransactionService standardTransactionService;
 
 
-    public AbstractTaskProcessor(TaskConfigRepository taskConfigRepository, ParserRuleService parserRuleService,
-                                 TaskExecutionLogRepository logRepository, StandardTransactionService standardTransactionService) {
-        this.taskConfigRepository = taskConfigRepository;
-        this.parserRuleService = parserRuleService;
-        this.logRepository = logRepository;
-        this.standardTransactionService = standardTransactionService;
-    }
+
+//    public AbstractTaskProcessor(TaskConfigRepository taskConfigRepository, ParserRuleService parserRuleService,
+//                                 TaskExecutionLogRepository logRepository, StandardTransactionService standardTransactionService) {
+//        this.taskConfigRepository = taskConfigRepository;
+//        this.parserRuleService = parserRuleService;
+//        this.logRepository = logRepository;
+//        this.standardTransactionService = standardTransactionService;
+//    }
+public AbstractTaskProcessor(TaskConfigRepository taskConfigRepository,
+                             ParserRuleService parserRuleService,
+                             TaskExecutionLogRepository logRepository,
+                             DynamicSqlExecutor dynamicSqlExecutor
+                             ) {
+    this.taskConfigRepository = taskConfigRepository;
+    this.parserRuleService = parserRuleService;
+    this.logRepository = logRepository;
+    this.dynamicSqlExecutor = dynamicSqlExecutor;
+
+}
 
 
-    @Transactional
     public void execute(String taskId, LocalDate dataDate, Map<String,Object> runtimeParams) {
         TaskExecutionLog log = new TaskExecutionLog();
         log.setTaskId(taskId);
@@ -55,26 +73,43 @@ public abstract class AbstractTaskProcessor {
 
 
         try {
+            // 1. 数据获取
             byte[] raw = fetchData(taskId, runtimeParams);
             log.setFetchStatus("SUCCESS");
             logRepository.save(log);
 
-
-            TaskConfig cfg = taskConfigRepository.findById(taskId).orElseThrow();
+            // 2. 加载任务 & 规则配置
+            TaskConfig cfg = taskConfigRepository.findById(taskId).orElseThrow(() -> new IllegalArgumentException("任务不存在: " + taskId));
             ParserRule rule = parserRuleService.loadRule(cfg.getParserRuleId());
             List<ParserRuleDetail> details = parserRuleService.loadRuleDetails(rule.getParserRuleId());
 
-
+            // 3. 调用解析器
             DataParser parser = ParserFactory.getParser(rule, details);
             List<Map<String,String>> rows = parser.parse(raw);
 
 
-// transform rows -> standard DTOs and persist
-// TODO: implement transformation & batch save
+            // 4. 清洗 + 动态入库
+//            List<StandardTransaction> txs = transformToStandard(rows, cfg, rule, details);
+//            standardTransactionService.saveBatch(txs);
+            List<Map<String,Object>> toInsert = new ArrayList<>();
+            for (Map<String,String> row : rows) {
+                Map<String,Object> mapped = new LinkedHashMap<>();
+                for (ParserRuleDetail d : details) {
+                    String rawVal = row.get(d.getTargetField());
+                    Object val = DataTransformer.transform(rawVal, d);
 
-            List<StandardTransaction> txs = transformToStandard(rows, cfg, rule, details);
-            standardTransactionService.saveBatch(txs);
+                    if (Boolean.TRUE.equals(d.getIsRequired()) && val == null) {
+                        throw new IllegalArgumentException("字段 " + d.getTargetField() + " 缺失");
+                    }
+                    mapped.put(d.getTargetField(), val);
+                }
+                toInsert.add(mapped);
+            }
 
+            // 动态 SQL 入库
+            dynamicSqlExecutor.batchInsert(rule.getTargetTable(), toInsert);
+
+            // 5. 更新日志
             log.setParseStatus("SUCCESS");
             log.setRecordCount(rows.size());
             logRepository.save(log);
